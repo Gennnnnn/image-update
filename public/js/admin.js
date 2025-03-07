@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   generateUserButton.addEventListener("click", () => {
     generateUserButton.disabled = true;
 
-    fetch("/generate-user", {
+    fetch("https://image-update.onrender.com/generate-user", {
       method: "POST",
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Fetch users from PostgreSQL and populate the table
-  fetch("/users")
+  fetch("https://image-update.onrender.com/users")
     .then((response) => response.json())
     .then((users) => {
       let rowIndex = 1; // ✅ Start row index at 1
@@ -129,7 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // Delete User Function
 function deleteUser(userID) {
   if (confirm(`Are you sure you want to delete user ${userID}?`)) {
-    fetch(`/users/${userID}`, { method: "DELETE" })
+    fetch(`https://image-update.onrender.com/users/${userID}`, {
+      method: "DELETE",
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -185,11 +187,14 @@ async function confirmEdit() {
   }
 
   try {
-    const response = await fetch("/update-user-name", {
-      method: "POST", // Ensure this matches your backend
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID: window.editingUserID, name: newName }), // Use correct variable
-    });
+    const response = await fetch(
+      "https://image-update.onrender.com/update-user-name",
+      {
+        method: "POST", // Ensure this matches your backend
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userID: window.editingUserID, name: newName }), // Use correct variable
+      }
+    );
 
     const result = await response.json();
 
@@ -259,7 +264,7 @@ function closeNameModal() {
 function deleteGeneratedUser(userID) {
   if (!userID) return;
 
-  fetch("/delete-user", {
+  fetch("https://image-update.onrender.com/delete-user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userID }),
@@ -302,7 +307,7 @@ function confirmName() {
   }
 
   // ✅ Send the name to the backend to update the database
-  fetch("/update-user-name", {
+  fetch("https://image-update.onrender.com/update-user-name", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userID: window.newUserID, name: nameInput }),
@@ -343,7 +348,7 @@ function confirmName() {
 
 async function fetchUsers() {
   try {
-    const response = await fetch("/get-users");
+    const response = await fetch("https://image-update.onrender.com/get-users");
     const users = await response.json();
     const tableBody = document
       .getElementById("usersTable")
@@ -498,10 +503,13 @@ async function submitUpload() {
   }
 
   try {
-    const response = await fetch("/upload-image", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      "https://image-update.onrender.com/upload-image",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     const data = await response.json();
     if (response.ok) {
@@ -529,61 +537,10 @@ function dataURItoBlob(dataURI) {
   return new Blob([arrayBuffer], { type: mimeString });
 }
 
-// Submit Uplaod
-// function submitUpload() {
-//   const uploadModal = document.getElementById("uploadModal");
-//   const userID = uploadModal ? uploadModal.getAttribute("data-user-id") : null;
-//   const categoryID = document.getElementById("categoryDropdown").value;
-//   const fileInput = document.getElementById("imageUpload");
-//   const file = fileInput.files[0];
-
-//   // Ensure all required values exist
-//   if (!userID) {
-//     alert("❌ User ID is missing. Please try again");
-//     return;
-//   }
-
-//   if (!categoryID) {
-//     alert("❌ Please select a category.");
-//     return;
-//   }
-
-//   if (!file) {
-//     alert("❌ Please upload an image.");
-//     return;
-//   }
-
-//   // Prepare FormData
-//   const formData = new FormData();
-//   formData.append("userID", userID);
-//   formData.append("category", categoryID);
-//   formData.append("image", file);
-
-//   // Send the request
-//   fetch("/upload-image", {
-//     method: "POST",
-//     body: formData,
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.success) {
-//         alert("✅ Image uploaded successfully!");
-//         closeUploadModal();
-
-//         // Clear file input safely
-//         fileInput.value = "";
-//         fileInput.replaceWith(fileInput.cloneNode(true));
-//       } else {
-//         alert("❌ Upload failed.");
-//       }
-//     })
-//     .catch((error) => console.error("Upload error", error));
-// }
-
 document.addEventListener("DOMContentLoaded", loadCategories);
 
 function loadCategories() {
-  fetch("/categories")
+  fetch("https://image-update.onrender.com/categories")
     .then((response) => response.json())
     .then((data) => {
       const dropdown = document.getElementById("categoryDropdown");
@@ -615,7 +572,7 @@ function addCategory() {
     return;
   }
 
-  fetch("/add-category", {
+  fetch("https://image-update.onrender.com/add-category", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userID, category: categoryInput }),
@@ -653,7 +610,7 @@ function deleteCategory() {
     return;
   }
 
-  fetch("/delete-category", {
+  fetch("https://image-update.onrender.com/delete-category", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ categoryID: selectedCategory, userID }),
@@ -683,7 +640,9 @@ function deleteCategory() {
 
 async function loadUserCategories(userID) {
   try {
-    const response = await fetch(`/get-categories/${userID}?_=${Date.now()}`);
+    const response = await fetch(
+      `https://image-update.onrender.com/get-categories/${userID}?_=${Date.now()}`
+    );
     const data = await response.json();
 
     if (!data.categories || !Array.isArray(data.categories)) {

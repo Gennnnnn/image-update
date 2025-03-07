@@ -16,7 +16,9 @@ async function redirectToUserPage() {
   }
 
   try {
-    const response = await fetch(`/users/${userID}`);
+    const response = await fetch(
+      `https://image-update.onrender.com/users/${userID}`
+    );
 
     console.log("Response Status:", response.status); // Debug
 
@@ -44,7 +46,9 @@ async function redirectToUserPage() {
 
 async function getUser(userID) {
   try {
-    const response = await fetch(`/users/${userID}`);
+    const response = await fetch(
+      `https://image-update.onrender.com/users/${userID}`
+    );
     if (!response.ok) throw new Error("User not found");
 
     const userData = await response.json();
@@ -56,11 +60,14 @@ async function getUser(userID) {
 
 async function updateUserName(userID, newName) {
   try {
-    const response = await fetch("/update-name", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID, name: newName }),
-    });
+    const response = await fetch(
+      "https://image-update.onrender.com/update-name",
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userID, name: newName }),
+      }
+    );
 
     if (!response.ok) throw new Error("Failed to update name");
 

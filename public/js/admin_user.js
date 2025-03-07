@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  fetch(`/get-user-images/${userID}`)
+  fetch(`https://image-update.onrender.com/get-user-images/${userID}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -128,7 +128,7 @@ async function deleteImage(imageUrl, imageWrapper) {
     console.warn("⚠️ imageWrapper is not a valid HTML element:", imageWrapper);
   }
 
-  fetch("/delete-image", {
+  fetch("https://image-update.onrender.com/delete-image", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ imageUrl }),

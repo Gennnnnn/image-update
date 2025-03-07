@@ -24,11 +24,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!password) return alert("❌ Please enter a password!");
 
     try {
-      const response = await fetch("/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userID, password }),
-      });
+      const response = await fetch(
+        "https://image-update.onrender.com/validate",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userID, password }),
+        }
+      );
 
       const data = await response.json();
 
@@ -80,7 +83,9 @@ function logout() {
 // Fetch and Display Categorized Images
 async function fetchUserImages(userID) {
   try {
-    const response = await fetch(`/get-user-images/${userID}`);
+    const response = await fetch(
+      `https://image-update.onrender.com/get-user-images/${userID}`
+    );
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const data = await response.json();

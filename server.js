@@ -23,13 +23,10 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-pool
-  .connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch((err) => {
-    console.error("❌ Database Connection Error:", err);
-    process.exit(1);
-  });
+pool.connect().catch((err) => {
+  console.error("❌ Database Connection Error:", err);
+  process.exit(1);
+});
 
 // Middleware
 app.use(cors());
@@ -628,10 +625,7 @@ app.get("/", (req, res) => {
 
 // Server Start
 app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT} for Customers`);
-  console.log(
-    `✅ Server running at http://localhost:${PORT}/admin.html for Admin`
-  );
+  console.log(`✅ Server running`);
 });
 
 export default pool;
