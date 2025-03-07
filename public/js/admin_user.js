@@ -62,9 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const imgElement = document.createElement("img");
           const validUrl = image.image_url ? image.image_url.trim() : "";
-          imgElement.src = validUrl.startsWith("http")
-            ? validUrl
-            : `${window.location.origin}/${validUrl}`;
+          imgElement.src = validUrl.startsWith("/")
+            ? `${window.location.origin}${validUrl}`
+            : validUrl;
 
           imgElement.alt = "Uploaded Image";
           imgElement.classList.add("uploaded-image");

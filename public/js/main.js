@@ -44,7 +44,7 @@ async function redirectToUserPage() {
 
 async function getUser(userID) {
   try {
-    const response = await fetch(`http://localhost:3000/users/${userID}`);
+    const response = await fetch(`/users/${userID}`);
     if (!response.ok) throw new Error("User not found");
 
     const userData = await response.json();
@@ -56,7 +56,7 @@ async function getUser(userID) {
 
 async function updateUserName(userID, newName) {
   try {
-    const response = await fetch("http://localhost:3000/update-name", {
+    const response = await fetch("/update-name", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userID, name: newName }),

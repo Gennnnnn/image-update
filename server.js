@@ -35,7 +35,8 @@ pool
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the furniapp directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve static files from the public directory
+// app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve static files from the public directory
+app.use("/uploads", express.static("uploads")); // Serve static files from the public directory
 
 // Ensure necessary directories exist
 (async () => {
@@ -77,13 +78,13 @@ app.post("/generate-user", async (req, res) => {
 // 📌 2. Upload images for a user
 app.post("/upload-image", upload.single("image"), async (req, res) => {
   const userID = req.body.userID;
-  const categoryName = req.body.category; // Category ID, not name
-  const imageURL = req.file ? `uploads/${req.file.filename}` : null;
+  const categoryID = req.body.category; // Category ID, not name
+  const imageURL = req.file ? `/uploads/${req.file.filename}` : null;
 
-  if (!userID || !categoryName || !imageURL || isNaN(categoryName)) {
+  if (!userID || !categoryID || !imageURL || isNaN(categoryID)) {
     console.error("❌ Invalid or missing required fields:", {
       userID,
-      categoryName,
+      categoryID,
       imageURL,
     });
     return res
@@ -94,22 +95,22 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
   try {
     const categoryCheck = await pool.query(
       `SELECT * FROM categories WHERE id = $1`,
-      [categoryName]
+      [categoryID]
     );
 
     if (categoryCheck.rows.length === 0) {
-      console.error("❌ Invalid category ID:", categoryName);
+      console.error("❌ Invalid category ID:", categoryID);
       return res.status(400).json({ error: "Invalid category ID" });
     }
 
     const userCategoryCheck = await pool.query(
       `SELECT * FROM user_categories WHERE user_id = $1 AND category_id = $2`,
-      [userID, categoryName]
+      [userID, categoryID]
     );
 
     if (userCategoryCheck.rows.length === 0) {
       console.error(
-        `❌ Category ID ${categoryName} is NOT linked to user ${userID}`
+        `❌ Category ID ${categoryID} is NOT linked to user ${userID}`
       );
       return res.status(400).json({ error: "Category not linked to user" });
     }
@@ -117,7 +118,7 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
     await pool.query(
       `INSERT INTO images (user_id, category_id, image_url)
       VALUES ($1, $2, $3)`,
-      [userID, categoryName, imageURL]
+      [userID, categoryID, imageURL]
     );
 
     res.json({ success: true, message: "Image uploaded successfully!" });
