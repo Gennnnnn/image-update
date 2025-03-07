@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Updates</title>
+    <link
+      rel="shortcut icon"
+      href="/images/favicon/customers.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script src="/js/user.js" defer></script>
+  </head>
+  <body>
+    <button id="logoutButton">Logout</button>
+    <div class="container">
+      <h2 id="header">Enter Password</h2>
+      <div class="password-container">
+        <input
+          type="password"
+          placeholder="Enter your password"
+          id="password"
+          autofocus
+        />
+        <button id="togglePassword">
+          <i class="fa-solid fa-eye" id="eyeIcon"></i>
+        </button>
+      </div>
+      <button id="submitButton">Submit</button>
+    </div>
+    <div id="imageContainer" style="display: none">
+      <h1 id="userTitle"></h1>
+      <h3>Your Updates:</h3>
+      <div id="images"></div>
+    </div>
+  </body>
+</html>
+
+<div id="imagePreviewModal" class="modal" onclick="closeImagePreview()">
+  <span class="close-btn" onclick="closeImagePreview()">&times;</span>
+  <img id="previewImage" class="modal-content-image" />
+</div>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link
+      rel="shortcut icon"
+      href="/images/favicon/admin.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/css/admin.css" />
+    <script src="/js/admin.js" defer></script>
+  </head>
+  <body>
+    <h1>Admin Panel</h1>
+
+    <button id="generateUser">Generate New User</button>
+    <div id="userInfo"></div>
+
+    <h2>All Users</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Password</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </body>
+</html>
+
+<!-- Edit Input Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Edit User Name</h2>
+    <input type="text" placeholder="Enter New Name" id="editNameInput" />
+    <div class="modal-buttons">
+      <button onclick="confirmEdit()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Name Input Modal -->
+<div id="nameModal" class="modal">
+  <div class="modal-content">
+    <h2>Enter User's Name</h2>
+    <input type="text" placeholder="Enter Name..." id="nameInput" />
+    <div class="modal-buttons">
+      <button onclick="confirmName()">Confirm</button>
+      <button onclick="closeNameModal()" class="cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="uploadModal" class="custom-modal">
+  <div class="modal-content-one">
+    <span class="close-btn" onclick="closeUploadModal()">&times;</span>
+    <h2>Upload Image</h2>
+
+    <!-- Hidden Input for User ID -->
+    <input type="hidden" id="userID" />
+
+    <!-- Add Category -->
+    <div class="category-section">
+      <input type="text" placeholder="Enter Category Name" id="categoryInput" />
+      <div class="category-buttons">
+        <button onclick="addCategory()" id="addCategoryBtn">Add</button>
+        <button onclick="deleteCategory()">Delete</button>
+      </div>
+    </div>
+
+    <!-- Category Dropdown -->
+    <select id="categoryDropdown">
+      <option value="" disabled selected>Select a category ▼</option>
+    </select>
+
+    <!-- Image Upload Options -->
+    <!-- <div class="image-upload">
+      <input type="file" accept="image/*" id="imageUpload" />
+    </div> -->
+    <div class="upload-options">
+      <button id="capturePhotoButton">📷 Take a Photo</button>
+      <button id="uploadButton">📁 Upload a Photo</button>
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        id="imageUpload"
+        style="display: none"
+      />
+    </div>
+
+    <!-- Canvas for Captured Photo (Hidden) -->
+    <canvas id="photoCanvas" style="display: none"></canvas>
+
+    <!-- Image Preview -->
+    <div id="previewContainer">
+      <img
+        src=""
+        alt="Selected Image"
+        style="display: none; width: 200px; height: auto"
+        id="previewImage"
+        class="preview-image"
+      />
+    </div>
+
+    <!-- Submit -->
+    <button class="submit-btn">Submit</button>
+  </div>
+</div>

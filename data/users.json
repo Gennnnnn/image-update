@@ -1,0 +1,17 @@
+{
+  "user123": {
+    "password": "securepass",
+    "images": [
+      "/images/chair1.jpg",
+      "/images/chair2.jpg",
+      "/uploads/1738896060108-vlcsnap-2025-01-16-00h26m42s452.png"
+    ]
+  },
+  "user456": {
+    "password": "anotherpass",
+    "images": [
+      "/images/chair3.jpg",
+      "/images/chair4.jpg"
+    ]
+  }
+}

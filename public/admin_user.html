@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage User Images</title>
+    <link
+      rel="shortcut icon"
+      href="/images/favicon/admin.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/css/admin.css" />
+    <script src="/js/admin_user.js" defer></script>
+  </head>
+  <body>
+    <button id="backButton" onclick="goBack()">Back to Admin</button>
+    <h1 id="userTitle">User Images</h1>
+    <div id="imageContainer"></div>
+  </body>
+</html>
+
+<div id="imagePreviewModal" class="modal" onclick="closeImagePreview()">
+  <span class="close-btn" onclick="closeImagePreview()">&times;</span>
+  <img
+    id="previewImage"
+    class="modal-content-image"
+    alt="Preview of Selected Image"
+  />
+</div>

@@ -1,0 +1,268 @@
+/* Define Color Variables */
+:root {
+  --bg-color: #f5f1e8;
+  --container-bg: #faf3e0;
+  --primary-color: #8b5e3b;
+  --secondary-color: #d2b48c;
+  --text-color: #3e2723;
+  --button-hover: #a67b5b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  margin: 50px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Updated Larger Container */
+.container {
+  max-width: 500px; /* Increased from 400px */
+  width: 100%;
+  padding: 30px;
+  background-color: var(--container-bg);
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Increased input size for better usability */
+input {
+  margin: 12px 0;
+  padding: 14px;
+  width: 100%;
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+/* Improved Button Styling */
+button {
+  margin: 12px 0;
+  padding: 14px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+  transform: scale(1.05);
+}
+
+/* Logout Button Styling */
+#logoutButton {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  padding: 10px 18px;
+  font-size: 14px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: auto;
+}
+
+#logoutButton:hover {
+  background-color: var(--button-hover);
+}
+
+/* Password Input & Eye Icon Adjustments */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.password-container button {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  right: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.password-container button:hover {
+  color: var(--primary-color);
+}
+
+.password-container button i {
+  pointer-events: none;
+}
+
+/* Improved Image Grid Layout */
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  max-width: 250px;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--secondary-color);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.uploaded-image:hover {
+  transform: scale(1.1);
+}
+
+/* Modal Enhancements */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease-in-out;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.modal-content-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile styles (for screens 768px and below) */
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  input,
+  button {
+    font-size: 16px;
+    padding: 12px;
+    max-width: 400px;
+  }
+
+  .uploaded-image {
+    max-width: 100%;
+    /* height: auto; */
+    border-radius: 8px;
+    will-change: transform;
+  }
+
+  .image-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  #logoutButton {
+    position: static;
+    width: 100%;
+  }
+
+  button {
+    width: auto;
+    min-width: 150px;
+    max-width: 400px;
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .modal-content {
+    width: clamp(280px, 90%, 400px);
+    padding: 20px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .modal:not([hidden]) {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .image-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .uploaded-image {
+    max-width: 90%;
+    border-radius: 6px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 350px;
+  }
+
+  button {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+}
