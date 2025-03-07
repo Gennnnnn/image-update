@@ -8,7 +8,6 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import crypto from "crypto";
 import pg from "pg";
-import bcrypt from "bcrypt";
 
 // Convert __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +20,7 @@ const PORT = 3000;
 const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 pool
@@ -632,3 +632,5 @@ app.listen(PORT, () => {
     `✅ Server running at http://localhost:${PORT}/admin.html for Admin`
   );
 });
+
+export default pool;
