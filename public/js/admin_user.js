@@ -62,9 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const imgElement = document.createElement("img");
           // Ensure the URL is correctly formatted
-          const validUrl = image.image_url.startsWith("http")
+          const validUrl = image.image_url?.startsWith("http")
             ? image.image_url // ✅ If it's already a full URL, use it
             : `${window.location.origin}${image.image_url}`;
+          console.log("🖼️ Image URL:", image.image_url);
 
           imgElement.src = validUrl;
 
