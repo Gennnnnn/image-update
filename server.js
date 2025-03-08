@@ -1,4 +1,4 @@
-import "dotenv/config";
+// import "dotenv/config";
 
 import express from "express";
 import fs from "fs";
@@ -8,13 +8,15 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import crypto from "crypto";
 import pg from "pg";
+import dotenv from "dotenv";
 
 // Convert __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+dotenv.config();
 const app = express();
-const PORT = 3000 || process.env.PORT;
+const PORT = 3000;
 
 // PostgreSQL Database Connection
 const { Pool } = pg;
@@ -29,17 +31,16 @@ pool.connect().catch((err) => {
 });
 
 // Middleware
+app.use(express.json());
+app.use(express.static("public")); // Serve static files from the furniapp directory
 app.use(
   cors({
-    origin: "https://image-update-rosy.vercel.app",
+    origin: "*",
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
   })
 );
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the furniapp directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve static files from the public directory
-// app.use("/uploads", express.static("uploads")); // Serve static files from the public directory
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads"))); // Serve static files from the public directory
 
 // Ensure necessary directories exist
 (async () => {
@@ -48,7 +49,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve s
 
 // Multer configuration for image uploads
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, "uploads")),
+  destination: "uploads",
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
 });
 const upload = multer({ storage });
@@ -80,16 +81,10 @@ app.post("/generate-user", async (req, res) => {
 
 // 📌 2. Upload images for a user
 app.post("/upload-image", upload.single("image"), async (req, res) => {
-  const userID = req.body.userID;
-  const categoryID = req.body.category; // Category ID, not name
-  const imageURL = req.file ? `/uploads/${req.file.filename}` : null;
+  const { userID, categoryID } = req.body;
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
-  if (!userID || !categoryID || !imageURL || isNaN(categoryID)) {
-    console.error("❌ Invalid or missing required fields:", {
-      userID,
-      categoryID,
-      imageURL,
-    });
+  if (!userID || !categoryID || !imagePath) {
     return res
       .status(400)
       .json({ error: "Invalid or missing required fields" });
@@ -121,10 +116,14 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
     await pool.query(
       `INSERT INTO images (user_id, category_id, image_url)
       VALUES ($1, $2, $3)`,
-      [userID, categoryID, imageURL]
+      [userID, categoryID, imagePath]
     );
 
-    res.json({ success: true, message: "Image uploaded successfully!" });
+    res.json({
+      success: true,
+      message: "Image uploaded successfully!",
+      imagePath: `https://image-update.onrender.com${imagePath}`,
+    });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred." });
     console.error("Database error:", error);
@@ -579,7 +578,7 @@ app.get("/get-user-images/:userID", async (req, res) => {
       if (row.image_id) {
         categoriesMap.get(row.category_id).images.push({
           image_id: row.image_id,
-          image_url: row.image_url,
+          image_url: `https://image-update.onrender.com${row.image_url}`,
         });
       }
     });
@@ -587,7 +586,7 @@ app.get("/get-user-images/:userID", async (req, res) => {
     const categoryData = Array.from(categoriesMap.values());
 
     res.json({
-      name: userName,
+      name: userResult.rows[0].name,
       categories: categoryData,
     });
   } catch (error) {
