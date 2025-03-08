@@ -9,12 +9,18 @@ import multer from "multer";
 import crypto from "crypto";
 import pg from "pg";
 import dotenv from "dotenv";
+import cloudinary from "cloudinary";
 
 // Convert __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 const app = express();
 const PORT = 3000;
 
@@ -81,8 +87,9 @@ app.post("/generate-user", async (req, res) => {
 
 // 📌 2. Upload images for a user
 app.post("/upload-image", upload.single("image"), async (req, res) => {
-  const { userID, categoryID } = req.body;
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+  const userID = req.body.userID;
+  const categoryID = req.body.category;
+  const imagePath = req.file.path;
 
   if (!userID || !categoryID || !imagePath) {
     return res
@@ -91,6 +98,10 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
   }
 
   try {
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(imagePath);
+    const imageURL = result.secure_url;
+
     const categoryCheck = await pool.query(
       `SELECT * FROM categories WHERE id = $1`,
       [categoryID]
@@ -116,13 +127,12 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
     await pool.query(
       `INSERT INTO images (user_id, category_id, image_url)
       VALUES ($1, $2, $3)`,
-      [userID, categoryID, imagePath]
+      [userID, categoryID, imageURL]
     );
 
     res.json({
       success: true,
-      message: "Image uploaded successfully!",
-      imagePath: `https://image-update.onrender.com${imagePath}`,
+      imageURL,
     });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred." });
