@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = 3000 || process.env.PORT;
 
 // PostgreSQL Database Connection
 const { Pool } = pg;
@@ -365,8 +365,8 @@ app.post("/add-category", async (req, res) => {
 
     // Insert the category if it doesn't exist
     const categoryResult = await pool.query(
-      `INSERT INTO categories (name) 
-      VALUES ($1) ON CONFLICT (name) 
+      `INSERT INTO categories (name) VALUES ($1)
+      ON CONFLICT (name) 
       DO NOTHING RETURNING id`,
       [category]
     );
@@ -384,13 +384,6 @@ app.post("/add-category", async (req, res) => {
       categoryID = existingCategory.rows[0].id;
     }
 
-    // Link user to category in `user_categories`
-    // await pool.query(
-    //   `INSERT INTO user_categories (user_id, category_id)
-    //    VALUES ($1, $2)
-    //    ON CONFLICT DO NOTHING`,
-    //   [userID, categoryID]
-    // );
     if (categoryID) {
       await pool.query(
         `INSERT INTO user_categories (user_id, category_id) 
