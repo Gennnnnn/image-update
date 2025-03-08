@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  fetch(`https://image-update.onrender.com/get-user-images/${userID}`)
+  fetch(
+    `https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/get-user-images/${userID}`
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -128,11 +130,14 @@ async function deleteImage(imageUrl, imageWrapper) {
     console.warn("⚠️ imageWrapper is not a valid HTML element:", imageWrapper);
   }
 
-  fetch("https://image-update.onrender.com/delete-image", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ imageUrl }),
-  })
+  fetch(
+    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/delete-image",
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageUrl }),
+    }
+  )
     .then((response) => {
       if (!response.ok) {
         return response.text().then((text) => {
