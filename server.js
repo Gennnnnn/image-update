@@ -99,7 +99,7 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
 
   try {
     // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(imagePath);
+    const result = await cloudinary.v2.uploader.upload(imagePath);
     const imageURL = result.secure_url;
 
     const categoryCheck = await pool.query(
