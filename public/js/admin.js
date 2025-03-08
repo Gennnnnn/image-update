@@ -10,13 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
   generateUserButton.addEventListener("click", () => {
     generateUserButton.disabled = true;
 
-    fetch(
-      "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/generate-user",
-      {
-        method: "POST",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-      }
-    )
+    fetch("https://image-update.onrender.com/generate-user", {
+      method: "POST",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -91,9 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Fetch users from PostgreSQL and populate the table
-  fetch(
-    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/users"
-  )
+  fetch("https://image-update.onrender.com/users")
     .then((response) => response.json())
     .then((users) => {
       let rowIndex = 1; // ✅ Start row index at 1
@@ -134,12 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // Delete User Function
 function deleteUser(userID) {
   if (confirm(`Are you sure you want to delete user ${userID}?`)) {
-    fetch(
-      `https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/users/${userID}`,
-      {
-        method: "DELETE",
-      }
-    )
+    fetch(`https://image-update.onrender.com/users/${userID}`, {
+      method: "DELETE",
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -196,7 +188,7 @@ async function confirmEdit() {
 
   try {
     const response = await fetch(
-      "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/update-user-name",
+      "https://image-update.onrender.com/update-user-name",
       {
         method: "POST", // Ensure this matches your backend
         headers: { "Content-Type": "application/json" },
@@ -272,14 +264,11 @@ function closeNameModal() {
 function deleteGeneratedUser(userID) {
   if (!userID) return;
 
-  fetch(
-    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/delete-user",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID }),
-    }
-  )
+  fetch("https://image-update.onrender.com/delete-user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userID }),
+  })
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
@@ -318,14 +307,11 @@ function confirmName() {
   }
 
   // ✅ Send the name to the backend to update the database
-  fetch(
-    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/update-user-name",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID: window.newUserID, name: nameInput }),
-    }
-  )
+  fetch("https://image-update.onrender.com/update-user-name", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userID: window.newUserID, name: nameInput }),
+  })
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
@@ -362,9 +348,7 @@ function confirmName() {
 
 async function fetchUsers() {
   try {
-    const response = await fetch(
-      "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/get-users"
-    );
+    const response = await fetch("https://image-update.onrender.com/get-users");
     const users = await response.json();
     const tableBody = document
       .getElementById("usersTable")
@@ -520,7 +504,7 @@ async function submitUpload() {
 
   try {
     const response = await fetch(
-      "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/upload-image",
+      "https://image-update.onrender.com/upload-image",
       {
         method: "POST",
         body: formData,
@@ -556,9 +540,7 @@ function dataURItoBlob(dataURI) {
 document.addEventListener("DOMContentLoaded", loadCategories);
 
 function loadCategories() {
-  fetch(
-    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/categories"
-  )
+  fetch("https://image-update.onrender.com/categories")
     .then((response) => response.json())
     .then((data) => {
       const dropdown = document.getElementById("categoryDropdown");
@@ -590,14 +572,11 @@ function addCategory() {
     return;
   }
 
-  fetch(
-    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/add-category",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID, category: categoryInput }),
-    }
-  )
+  fetch("https://image-update.onrender.com/add-category", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userID, category: categoryInput }),
+  })
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
@@ -631,14 +610,11 @@ function deleteCategory() {
     return;
   }
 
-  fetch(
-    "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/delete-category",
-    {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ categoryID: selectedCategory, userID }),
-    }
-  )
+  fetch("https://image-update.onrender.com/delete-category", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ categoryID: selectedCategory, userID }),
+  })
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
@@ -665,7 +641,7 @@ function deleteCategory() {
 async function loadUserCategories(userID) {
   try {
     const response = await fetch(
-      `https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/get-categories/${userID}?_=${Date.now()}`
+      `https://image-update.onrender.com/get-categories/${userID}?_=${Date.now()}`
     );
     const data = await response.json();
 

@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       const response = await fetch(
-        "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/validate",
+        "https://image-update.onrender.com/validate",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -84,7 +84,7 @@ function logout() {
 async function fetchUserImages(userID) {
   try {
     const response = await fetch(
-      `https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/get-user-images/${userID}`
+      `https://image-update.onrender.com/get-user-images/${userID}`
     );
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 

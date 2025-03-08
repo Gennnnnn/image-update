@@ -17,7 +17,7 @@ async function redirectToUserPage() {
 
   try {
     const response = await fetch(
-      `https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/users/${userID}`
+      `https://image-update.onrender.com/users/${userID}`
     );
 
     console.log("Response Status:", response.status); // Debug
@@ -47,7 +47,7 @@ async function redirectToUserPage() {
 async function getUser(userID) {
   try {
     const response = await fetch(
-      `https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/users/${userID}`
+      `https://image-update.onrender.com/users/${userID}`
     );
     if (!response.ok) throw new Error("User not found");
 
@@ -61,7 +61,7 @@ async function getUser(userID) {
 async function updateUserName(userID, newName) {
   try {
     const response = await fetch(
-      "https://image-update-o45tq68h1-genesis-villareals-projects-c9368217.vercel.app/update-name",
+      "https://image-update.onrender.com/update-name",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

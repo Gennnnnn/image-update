@@ -29,7 +29,13 @@ pool.connect().catch((err) => {
 });
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://image-update-rosy.vercel.app",
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the furniapp directory
 // app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve static files from the public directory
