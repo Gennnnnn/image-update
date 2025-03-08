@@ -61,9 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
           imageContainer.classList.add("image-wrapper");
 
           const imgElement = document.createElement("img");
+          const backendURL = "https://image-update.onrender.com";
           const validUrl = image.image_url ? image.image_url.trim() : "";
-          imgElement.src = validUrl.startsWith("/")
-            ? `${window.location.origin}${validUrl}`
+          imgElement.src = validUrl.startsWith("/uploads")
+            ? `${backendURL}${validUrl}`
             : validUrl;
 
           imgElement.alt = "Uploaded Image";

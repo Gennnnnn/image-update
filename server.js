@@ -38,8 +38,8 @@ app.use(
 );
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the furniapp directory
-// app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve static files from the public directory
-app.use("/uploads", express.static("uploads")); // Serve static files from the public directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Serve static files from the public directory
+// app.use("/uploads", express.static("uploads")); // Serve static files from the public directory
 
 // Ensure necessary directories exist
 (async () => {
