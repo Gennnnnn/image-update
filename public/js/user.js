@@ -129,6 +129,8 @@ async function fetchUserImages(userID) {
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("image-wrapper");
 
+        const imgElement = document.createElement("img");
+
         const rawUrl = image.image_url;
 
         const validUrl = rawUrl

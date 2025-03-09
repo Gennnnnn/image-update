@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const validUrl = rawUrl
             .replace(/^https:\/\/image-update\.onrender\.com/, "")
             .trim();
-          console.log("🖼️ Fixed Image URL:", validUrl); // Debugging log
           imgElement.src = validUrl;
 
           imgElement.alt = "Uploaded Image";
