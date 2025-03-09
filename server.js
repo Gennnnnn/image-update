@@ -209,9 +209,18 @@ app.delete("/users/:userID", async (req, res) => {
     if (userCheck.rows.length === 0)
       return res.status(404).json({ error: "User not found" });
 
+    // Delete all images belonging to the user
+    await pool.query("DELETE FROM images WHERE user_id = $1", [userID]);
+
+    // Delete the user's categories (if stored in `user_categories`)
+    await pool.query("DELETE FROM user_categories WHERE user_id = $1", [
+      userID,
+    ]);
+
+    // Finally, delete the user
     await pool.query("DELETE FROM users WHERE user_id = $1", [userID]);
 
-    res.json({ message: "Users deleted successfully" });
+    res.json({ message: "User, Images, and Categories deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred." });
     console.error("Database error:", error);
