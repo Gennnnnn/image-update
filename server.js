@@ -217,9 +217,6 @@ app.delete("/users/:userID", async (req, res) => {
       userID,
     ]);
 
-    // Delete categories created by the admin
-    await pool.query("DELETE FROM categories WHERE user_id = $1", [userID]);
-
     // Finally, delete the user
     await pool.query("DELETE FROM users WHERE user_id = $1", [userID]);
 
