@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Store userID temporarily for updating name
         window.newUserID = data.userID;
 
-        // Open the name modal
         openNameModal();
 
         // Add the new user row with "Pending..."
@@ -138,7 +137,6 @@ function deleteUser(userID) {
           alert("Error: " + data.error);
         } else {
           alert(data.message);
-          // location.reload();
           document.querySelector(`tr[data-user-id="${userID}"]`).remove();
         }
       })
@@ -151,7 +149,6 @@ function openEditModal(userID, currentName) {
   const editInput = document.getElementById("editNameInput");
   editInput.value = currentName;
 
-  // document.getElementById("editNameInput").value = currentName;
   document.getElementById("editModal").style.display = "block";
 
   // Fcous on the input field
@@ -240,15 +237,6 @@ function openNameModal() {
 
 // Function to close name modal
 function closeNameModal() {
-  // const nameInputField = document.getElementById("nameInput");
-  // const enteredName = nameInputField.value.trim();
-
-  // Check if user canceled without entering a name **BEFORE** clearing the field
-  // if (!enteredName) {
-  //   console.warn("⚠️ User canceled, deleting generated user...");
-  //   deleteGeneratedUser(window.newUserID);
-  // }
-
   if (window.newUserID) {
     console.warn("⚠️ User canceled, deleting generated user...");
     deleteGeneratedUser(window.newUserID);
@@ -281,7 +269,6 @@ function deleteGeneratedUser(userID) {
     })
     .catch((error) => console.error("Error deleting user:", error));
 
-  // Clear stored userID
   window.newUserID = "";
 }
 
@@ -329,21 +316,16 @@ function confirmName() {
           }
         }
 
-        // Clear the stored userID after update
         window.newUserID = "";
 
         // ✅ Close the modal
         document.getElementById("nameInput").value = "";
         document.getElementById("nameModal").style.display = "none";
-        // closeNameModal();
       } else {
         console.error("❌ Failed to update name:", data.error);
       }
     })
     .catch((error) => console.error("Error updating user name:", error));
-
-  // Clear input field for next use
-  // document.getElementById("nameInput").value = "";
 }
 
 async function fetchUsers() {
@@ -471,7 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Function to upload the selected/captured image
 async function submitUpload() {
   if (!capturedImage) {
-    alert("Please take or select an image first");
+    alert("❌ Please take or select an image first");
     return;
   }
 
@@ -484,7 +466,7 @@ async function submitUpload() {
   }
 
   if (!category) {
-    alert("Please select a category!");
+    alert("❌ Please select a category!");
     return;
   }
 
@@ -519,7 +501,7 @@ async function submitUpload() {
     }
   } catch (error) {
     console.error("Upload error:", error);
-    alert("An error occurred. Try again.");
+    alert("❌ An error occurred. Try again.");
   }
 }
 
@@ -579,7 +561,6 @@ function addCategory() {
     .then((data) => {
       if (data.success) {
         alert("✅ Category added successfully!");
-        // **DO NOT CLOSE THE MODAL** – Just clear the input field
         categoryInputField.value = "";
 
         loadUserCategories(userID);

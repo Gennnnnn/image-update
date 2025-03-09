@@ -1,5 +1,3 @@
-// import "dotenv/config";
-
 import express from "express";
 import fs from "fs";
 import cors from "cors";
@@ -21,6 +19,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
 const app = express();
 const PORT = 3000;
 
@@ -59,7 +58,6 @@ app.use(
     allowedHeaders: "Content-Type, Authorization, x-requested-with",
   })
 );
-// app.use("/uploads", express.static(path.join(process.cwd(), "uploads"))); // Serve static files from the public directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Ensure necessary directories exist
@@ -76,16 +74,11 @@ const upload = multer({ storage });
 
 // 📌 1. Generate new user
 app.post("/generate-user", async (req, res) => {
-  // if (!req.headers["x-requested-with"])
-  //   return res.status(400).json({ error: "Invalid Request" });
-
   try {
     // Generate random userID & password
     const userID = `user${crypto.randomBytes(4).toString("hex")}`;
     const rawPassword = crypto.randomBytes(6).toString("hex");
-    // const hashedPassword = await bcrypt.hash(rawPassword, 10);
 
-    // Store hashed password in DB, not raw password
     await pool.query(
       "INSERT INTO users (user_id, password, name) VALUES ($1, $2, $3)",
       [userID, rawPassword, ""]
@@ -220,7 +213,9 @@ app.delete("/users/:userID", async (req, res) => {
     // Finally, delete the user
     await pool.query("DELETE FROM users WHERE user_id = $1", [userID]);
 
-    res.json({ message: "User, Images, and Categories deleted successfully" });
+    res.json({
+      message: "✅ User, Images, and Categories deleted successfully",
+    });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred." });
     console.error("Database error:", error);
@@ -260,7 +255,7 @@ app.post("/users", async (req, res) => {
       }
     }
 
-    res.json({ message: "User added successfully" });
+    res.json({ message: "✅ User added successfully" });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred." });
     console.error("Database error:", error);
@@ -283,7 +278,7 @@ app.put("/update-name", async (req, res) => {
     if (result.rowCount === 0)
       return res.status(404).json({ error: "User not found!" });
 
-    res.json({ message: "Name updated successfully", user: result.rows[0] });
+    res.json({ message: "✅ Name updated successfully", user: result.rows[0] });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred." });
     console.error("Database error:", error);
@@ -317,11 +312,6 @@ app.get("/users/:userID", async (req, res) => {
       `,
       [userID]
     );
-
-    // If no results, send an error response
-    // if (result.rows.length === 0) {
-    //   return res.status(404).json({ error: "User not found" });
-    // }
 
     // Return all images for the user
     res.json(result.rows);
@@ -519,13 +509,8 @@ app.delete("/delete-image", async (req, res) => {
         .json({ success: false, error: "Missing image URL" });
     }
 
-    // Example: Delete from database
-
     // Decode URL to avoid encoding issues
     const decodedImageUrl = decodeURIComponent(imageUrl.trim());
-
-    // Extract image filename from path
-    // const imageFilename = decodeURIComponent(imageUrl.split("/").pop().trim());
 
     // Delete from the database
     const deleteResult = await pool.query(

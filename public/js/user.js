@@ -41,11 +41,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         hideLoginFields();
         await fetchUserImages(userID);
       } else {
-        alert(data.error || "Incorrect Password. Please try again!");
+        alert(data.error || "❌ Incorrect Password. Please try again!");
       }
     } catch (error) {
       console.error("Error validating password:", error);
-      alert("An error occurred. Please try again later.");
+      alert("❌ An error occurred. Please try again later.");
     }
   });
 

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userID = urlParams.get("userID");
 
   if (!userID) {
-    alert("User not found!");
+    alert("❌ User not found!");
     window.location.href = "admin.html";
     return;
   }
@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const fragment = document.createDocumentFragment();
-      // const categoriesMap = new Map(); // To group images by category
 
       // Organize images by category
       (data.categories || []).forEach((category) => {

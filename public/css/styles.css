@@ -25,7 +25,7 @@ body {
 
 /* Updated Larger Container */
 .container {
-  max-width: 500px; /* Increased from 400px */
+  max-width: 500px;
   width: 100%;
   padding: 30px;
   background-color: var(--container-bg);
@@ -199,7 +199,6 @@ button:hover {
 
   .uploaded-image {
     max-width: 100%;
-    /* height: auto; */
     border-radius: 8px;
     will-change: transform;
   }

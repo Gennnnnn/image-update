@@ -109,8 +109,8 @@ input[type="file"] {
 
 .image-preview img {
   width: 100%;
-  max-width: 200px; /* Set max width */
-  height: auto; /* Maintain aspect ratio */
+  max-width: 200px;
+  height: auto;
   object-fit: cover;
   border-radius: 5px;
   border: 2px solid var(--secondary-color);
@@ -292,23 +292,16 @@ td {
 
 /* Category Input & Dropdown */
 .category-section {
-  /* display: flex;
-  gap: 10px;
-  margin-bottom: 15px; */
   width: 100%;
 }
 
 .category-section input {
-  /* flex: 1;
-  padding: 5px; */
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
 }
 
 .category-buttons {
-  /* padding: 5px 10px;
-  cursor: pointer; */
   display: flex;
   justify-content: space-between;
 }
@@ -356,10 +349,6 @@ td {
 }
 
 .image-wrapper {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px; */
   margin-bottom: 10px;
   position: relative;
   max-width: 250px;
@@ -368,8 +357,8 @@ td {
 
 .uploaded-image {
   width: 100%;
-  height: 100%; /* Maintain aspect ratio */
-  max-width: 250px; /* Set max width */
+  height: 100%;
+  max-width: 250px;
   max-height: 250px;
   object-fit: cover;
   border-radius: 5px;
@@ -413,8 +402,8 @@ td {
 }
 
 #backButton {
-  background-color: var(--admin-highlight); /* Primary button color */
-  color: #ffffff; /* White text */
+  background-color: var(--admin-highlight);
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -426,11 +415,11 @@ td {
 }
 
 #backButton:hover {
-  background-color: var(--button-hover); /* Darker shade on hover */
+  background-color: var(--button-hover);
 }
 
 #backButton:active {
-  background-color: var(--text-color); /* Even darker when clicked */
+  background-color: var(--text-color);
 }
 
 /* Style the dropdown container */
@@ -445,9 +434,9 @@ td {
   color: #3498db;
   cursor: pointer;
   transition: 0.3s ease-in-out;
-  appearance: none; /* Removes default dropdown arrow */
-  -webkit-appearance: none; /* For Safari */
-  -moz-appearance: none; /* For Firefox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233498db'><path d='M7 10l5 5 5-5H7z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 12px center;
@@ -478,9 +467,6 @@ td {
 }
 
 .image-grid {
-  /* display: flex;
-  flex-wrap: wrap;
-  gap: 10px; */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
@@ -618,7 +604,6 @@ button:hover {
 
   .uploaded-image {
     max-width: 100%;
-    /* height: auto; */
     border-radius: 8px;
     will-change: transform;
   }

@@ -11,7 +11,7 @@ async function redirectToUserPage() {
   const userID = document.getElementById("userID").value.trim();
 
   if (!userID) {
-    alert("Please enter a valid User ID.");
+    alert("❌ Please enter a valid User ID.");
     return;
   }
 
