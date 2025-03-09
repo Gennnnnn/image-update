@@ -29,12 +29,25 @@ const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
+  keepAlive: true,
 });
 
-pool.connect().catch((err) => {
-  console.error("❌ Database Connection Error:", err);
-  process.exit(1);
+pool.on("error", (error) => {
+  console.error("❌ Unexpected Database Error:", error);
 });
+
+(async () => {
+  try {
+    const client = await pool.connect();
+    console.log("✅ Database Connected Successfully!");
+    client.release();
+  } catch (error) {
+    console.error("❌ Database Connection Error:", error);
+    process.exit(1);
+  }
+})();
 
 // Middleware
 app.use(express.json());
@@ -42,11 +55,12 @@ app.use(express.static("public")); // Serve static files from the furniapp direc
 app.use(
   cors({
     origin: "*",
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
+    methods: "GET, POST, PUT, DELETE",
+    allowedHeaders: "Content-Type, Authorization, x-requested-with",
   })
 );
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads"))); // Serve static files from the public directory
+// app.use("/uploads", express.static(path.join(process.cwd(), "uploads"))); // Serve static files from the public directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Ensure necessary directories exist
 (async () => {
@@ -576,6 +590,23 @@ app.get("/get-user-images/:userID", async (req, res) => {
     const categoriesMap = new Map();
 
     imagesQuery.rows.forEach((row) => {
+      // Fix Cloudinary URLs and local URLs
+      let fixedUrl = row.image_url;
+
+      // ✅ Only prepend "https://image-update.onrender.com" if it's a local file
+      if (
+        !fixedUrl.startsWith("http") &&
+        !fixedUrl.includes("res.cloudinary.com")
+      ) {
+        fixedUrl = `https://image-update.onrender.com/${fixedUrl.replace(
+          /^\/+/,
+          ""
+        )}`;
+      }
+
+      console.log("📸 Image from DB:", row.image_url);
+      console.log("✅ Fixed Image URL:", fixedUrl);
+
       if (!categoriesMap.has(row.category_id)) {
         categoriesMap.set(row.category_id, {
           category_id: row.category_id,
@@ -584,19 +615,16 @@ app.get("/get-user-images/:userID", async (req, res) => {
         });
       }
 
-      // Only add image if it exists
-      if (row.image_id) {
-        categoriesMap.get(row.category_id).images.push({
-          image_id: row.image_id,
-          image_url: `https://image-update.onrender.com${row.image_url}`,
-        });
-      }
+      categoriesMap.get(row.category_id).images.push({
+        image_id: row.image_id,
+        image_url: fixedUrl,
+      });
     });
 
     const categoryData = Array.from(categoriesMap.values());
 
     res.json({
-      name: userResult.rows[0].name,
+      name: userName,
       categories: categoryData,
     });
   } catch (error) {

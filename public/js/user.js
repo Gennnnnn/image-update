@@ -129,14 +129,13 @@ async function fetchUserImages(userID) {
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("image-wrapper");
 
-        const imgElement = document.createElement("img");
-        // Ensure the URL is correctly formatted
-        const validUrl = image.image_url?.startsWith("http")
-          ? image.image_url // ✅ If it's already a full URL, use it
-          : `${window.location.origin}${image.image_url}`;
-        console.log("🖼️ Image URL:", image.image_url);
+        const rawUrl = image.image_url;
 
+        const validUrl = rawUrl
+          .replace(/^https:\/\/image-update\.onrender\.com/, "")
+          .trim();
         imgElement.src = validUrl;
+
         imgElement.alt = "Uploaded Image";
         imgElement.classList.add("uploaded-image");
 

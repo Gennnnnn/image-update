@@ -470,8 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Function to upload the selected/captured image
 async function submitUpload() {
-  console.log("submitUpload() called");
-
   if (!capturedImage) {
     alert("Please take or select an image first");
     return;

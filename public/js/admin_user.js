@@ -61,12 +61,13 @@ document.addEventListener("DOMContentLoaded", () => {
           imageContainer.classList.add("image-wrapper");
 
           const imgElement = document.createElement("img");
-          // Ensure the URL is correctly formatted
-          const validUrl = image.image_url?.startsWith("http")
-            ? image.image_url // ✅ If it's already a full URL, use it
-            : `${window.location.origin}${image.image_url}`;
-          console.log("🖼️ Image URL:", image.image_url);
 
+          const rawUrl = image.image_url;
+
+          const validUrl = rawUrl
+            .replace(/^https:\/\/image-update\.onrender\.com/, "")
+            .trim();
+          console.log("🖼️ Fixed Image URL:", validUrl); // Debugging log
           imgElement.src = validUrl;
 
           imgElement.alt = "Uploaded Image";
@@ -117,52 +118,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Delete Image Function
 async function deleteImage(imageUrl, imageWrapper) {
-  if (!imageWrapper) {
-    console.warn("⚠️ Could not find image wrapper.");
-    return;
-  }
+  console.log("🗑️ Attempting to delete image:", imageUrl);
 
-  if (imageWrapper instanceof HTMLElement) {
-    const deleteButton = imageWrapper.querySelector(".delete-btn");
-    if (deleteButton) {
-      deleteButton.disabled = true;
+  // ✅ Remove "https://image-update.onrender.com" if it's incorrectly added
+  const fixedImageUrl = imageUrl
+    .replace(/^https:\/\/image-update\.onrender\.com/, "")
+    .trim();
+
+  console.log("✅ Cleaned Image URL:", fixedImageUrl);
+
+  try {
+    const response = await fetch(
+      "https://image-update.onrender.com/delete-image",
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageUrl: fixedImageUrl }), // ✅ Send cleaned URL
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server error: ${response.status} - ${errorText}`);
     }
-  } else {
-    console.warn("⚠️ imageWrapper is not a valid HTML element:", imageWrapper);
-  }
 
-  fetch("https://image-update.onrender.com/delete-image", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ imageUrl }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return response.text().then((text) => {
-          throw new Error(`Server error: ${response.status} - ${text}`);
-        });
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.success) {
-        // Check if imageWrapper exists before removing
-        if (imageWrapper && imageWrapper.remove) {
-          imageWrapper.remove();
-        } else {
-          console.warn("⚠️ Image wrapper not found or already removed.");
-        }
+    const data = await response.json();
 
-        // Optionally, replace alert with a toast notification
-        alert("✅ Image deleted successfully!");
+    if (data.success) {
+      console.log("✅ Image deleted successfully:", fixedImageUrl);
 
-        // alert("✅ Image deleted successfully!");
+      if (imageWrapper.remove) {
+        imageWrapper.remove();
       } else {
-        alert("❌ Failed to delete image.");
+        console.warn("⚠️ Image wrapper not found or already removed.");
       }
-    })
-    .catch((error) => console.error("Error deleting image:", error));
-  // alert("⚠️ An error occurred while deleting the image.", () => {});
+
+      alert("✅ Image deleted successfully!");
+    } else {
+      throw new Error(data.message || "Unknown error occurred.");
+    }
+  } catch (error) {
+    console.error("❌ Error deleting image:", error);
+    alert(`❌ Failed to delete image: ${error.message}`);
+  }
 }
 
 function showCustomModal(message, onConfirm) {
